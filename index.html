@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* CONFIGURAÇÕES TONTUÁRIAS E VARIÁVEIS DE TAMANHO */
+        /* CONFIGURAÇÕES DE TAMANHO E VARIÁVEIS RESPONSIVAS */
         :root {
             --wrapper-w: 430px;
             --wrapper-h: 880px;
@@ -20,7 +20,7 @@
             --names-size: 52px;
         }
 
-        /* CONFIGURAÇÃO PARA TELAS MAIORES (COMPUTADOR / TABLET) */
+        /* CONFIGURAÇÃO PARA TELAS DE COMPUTADOR */
         @media (min-width: 768px) {
             :root {
                 --wrapper-w: 580px;
@@ -50,7 +50,7 @@
         }
 
         /* =======================================================
-           1. PÉTALAS EM SEGUNDO PLANO (TELA INTEIRA DO PC)
+           1. PÉTALAS DO FUNDO GERAL (TELA INTEIRA DO PC)
            ======================================================= */
         .screen-petals-bg {
             position: fixed;
@@ -58,7 +58,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1; /* Fica atrás de tudo, no fundo da tela */
+            z-index: -1;
             pointer-events: none;
         }
 
@@ -85,7 +85,7 @@
         }
 
         /* =======================================================
-           2. PALCO DO CONVITE (CONTAINER PRINCIPAL)
+           2. PALCO DO CONVITE
            ======================================================= */
         .wrapper {
             position: relative;
@@ -101,7 +101,7 @@
         }
 
         /* =======================================================
-           3. ENVELOPE KRAFT HIPER-REALISTA (PAISAGEM)
+           3. ENVELOPE KRAFT REALISTA
            ======================================================= */
         .envelope-container {
             position: absolute;
@@ -134,7 +134,6 @@
             font-weight: 400;
         }
 
-        /* Corpo Estrutural do Envelope */
         .envelope-box {
             position: relative;
             width: var(--env-w);
@@ -145,7 +144,6 @@
             transform-style: preserve-3d;
         }
 
-        /* Estilização Individual das Dobras com Clip-path (Papel Realista) */
         .flap {
             position: absolute;
             top: 0;
@@ -175,7 +173,6 @@
             z-index: 3;
         }
 
-        /* Aba Superior Móvel */
         .top-flap-container {
             position: absolute;
             top: 0;
@@ -193,7 +190,6 @@
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.18));
         }
 
-        /* Lacre de Cera Texturizado */
         .wax-seal {
             position: absolute;
             top: 40%;
@@ -235,7 +231,6 @@
             pointer-events: none;
             text-shadow: 0 2px 4px rgba(0,0,0,0.4);
             z-index: 6;
-            transition: opacity 0.4s ease;
         }
 
         .envelope-footer {
@@ -247,7 +242,6 @@
             line-height: 1.8;
         }
 
-        /* Rodapé Floral Ilustrativo */
         .floral-bottom-decor {
             position: absolute;
             bottom: 0;
@@ -260,7 +254,7 @@
         }
 
         /* =======================================================
-           4. CONVITE INTERNO LUXUOSO (BORDAS DUPLAS)
+           4. CONVITE INTERNO COM CAMADA INTERNA DE PÉTALAS
            ======================================================= */
         .card-container {
             position: absolute;
@@ -282,6 +276,41 @@
             border: 10px double #ebdcd0;
         }
 
+        /* Container das pétalas internas (Fica por cima dos textos, mas ignora toques) */
+        .card-petals-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 25; /* Alto para flutuar por cima, mas não bloqueia cliques devido ao pointer-events */
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .card-petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ffb7b2 0%, #ffcbd1 100%);
+            border-radius: 12% 75% 12% 75%;
+            opacity: 0.75;
+            animation: cardFall linear infinite;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+        }
+
+        @keyframes cardFall {
+            0% {
+                transform: translateY(-30px) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            15% { opacity: 0.75; }
+            85% { opacity: 0.75; }
+            100% {
+                transform: translateY(950px) rotate(450deg) translateX(70px);
+                opacity: 0;
+            }
+        }
+
+        /* ESTILOS DOS TEXTOS */
         .verse {
             font-size: 10px;
             text-align: center;
@@ -419,7 +448,7 @@
         }
 
         /* =======================================================
-           5. GATILHOS DA ANIMAÇÃO DE ABERTURA (CSS CLASSSES)
+           5. GATILHOS DA ANIMAÇÃO DE ABERTURA
            ======================================================= */
         .wrapper.is-open .top-flap-container {
             transform: rotateX(180deg);
@@ -482,6 +511,9 @@
         </div>
 
         <div class="card-container">
+            
+            <div class="card-petals-container" id="cardPetals"></div>
+
             <div class="verse">
                 "E, ACIMA DE TUDO, TENHAM AMOR, POIS O AMOR UNE<br>PERFEITAMENTE TODAS AS COISAS." – CL 3:14
             </div>
@@ -530,14 +562,14 @@
                     <div class="menu-label">LISTA DE<br>PRESENTES</div>
                 </a>
 
-                <a href="http://maps.google.com/?q=Santuário+Nossa+Senhora+Aparecida+Presidente+Prudente" target="_blank" class="menu-item">
+                <a href="http://maps.google.com" target="_blank" class="menu-item">
                     <div class="icon-circle">
                         <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>
                     </div>
                     <div class="menu-label">CERIMÔNIA</div>
                 </a>
 
-                <a href="http://maps.google.com/?q=Fanny+Eventos+Presidente+Prudente" target="_blank" class="menu-item">
+                <a href="http://maps.google.com" target="_blank" class="menu-item">
                     <div class="icon-circle">
                         <svg viewBox="0 0 24 24"><path d="M11 21h2v-7h-2v7zm7-18H6c-1.1 0-2 .9-2 2v3c0 3.49 2.56 6.38 6 6.93V19H5v2h14v-2h-5v-3.07c3.44-.55 6-3.44 6-6.93V5c0-1.1-.9-2-2-2zm0 5H6V5h12v3z"/></svg>
                     </div>
@@ -556,13 +588,13 @@
     </div>
 
     <script>
-        // Executa a abertura e desdobramento do envelope
+        // Dispara a animação de abertura do envelope
         function openEnvelope() {
             const stage = document.getElementById('stage');
             stage.classList.add('is-open');
         }
 
-        // Motor dinâmico para gerar pétalas em toda a janela do browser
+        // Sistema 1: Pétalas no fundo global da tela (PC/Browser)
         function spawnGlobalPetals() {
             const container = document.getElementById('globalPetals');
             if (!container) return;
@@ -570,26 +602,42 @@
             const petal = document.createElement('div');
             petal.classList.add('petal');
             
-            // Randomização de tamanho e posicionamento horizontal
             const size = Math.random() * 14 + 10; 
             petal.style.width = `${size}px`;
             petal.style.height = `${size}px`;
             petal.style.left = `${Math.random() * 100}vw`;
             
-            // Variação de velocidade de queda suave e atraso
             petal.style.animationDuration = `${Math.random() * 4 + 5}s`; 
             petal.style.delay = `${Math.random() * 2}s`;
 
             container.appendChild(petal);
-
-            // Coleta de lixo: apaga elementos antigos da DOM para leveza da aplicação
-            setTimeout(() => {
-                petal.remove();
-            }, 8000);
+            setTimeout(() => { petal.remove(); }, 8000);
         }
 
-        // Loop contínuo de spawn das pétalas em segundo plano
-        setInterval(spawnGlobalPetals, 250);
+        // Sistema 2: Pétalas exclusivas caindo por dentro do convite aberto
+        function spawnCardPetals() {
+            const container = document.getElementById('cardPetals');
+            if (!container) return;
+
+            const cardPetal = document.createElement('div');
+            cardPetal.classList.add('card-petal');
+            
+            // Pétalas levemente menores para harmonizar com o espaço interno do papel
+            const size = Math.random() * 10 + 7; 
+            cardPetal.style.width = `${size}px`;
+            cardPetal.style.height = `${size}px`;
+            cardPetal.style.left = `${Math.random() * 100}%`;
+            
+            cardPetal.style.animationDuration = `${Math.random() * 3 + 4}s`; 
+            cardPetal.style.delay = `${Math.random() * 1}s`;
+
+            container.appendChild(cardPetal);
+            setTimeout(() => { cardPetal.remove(); }, 6000);
+        }
+
+        // Loops independentes de geração
+        setInterval(spawnGlobalPetals, 250); // Fundo geral
+        setInterval(spawnCardPetals, 350);   // Dentro do convite
     </script>
 
 </body>
